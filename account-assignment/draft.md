@@ -3,7 +3,8 @@
 ### Table of Contents
 [Motivation](#motivation)\
 [Interface by Forms](#interface-by-forms)\
-[Interface as an Assistant](#interface-as-an-assistant)
+[Interface as an Assistant](#interface-as-an-assistant)\
+[Theory of Interfaces](#theory-of-interfaces)\
 
 ### Motivation <span id='1'></span>
 
@@ -51,4 +52,11 @@ Similarly if you want to create the same affect but you are on a mobile phone,  
 
 ### Theory of interfaces
 
-If we can accept that all interfaces can be reduced to a form, and that user interfaces are assistants that help you fill in forms to affect the application, then it is reasonable to argue that an effective interface is on the helps you fill in forms really well. How the interface helps you fill in the forms is probably a more complicated topic, however I think that some very desirable characteristics of form filling assistants (interfaces) is that they give you relevant information that will help you make decisions on how to fill the form, and that they provide useful information on the state of the form you are filling.
+If we can accept that all interfaces can be reduced to a form, and that user interfaces are assistants that help you fill in forms to affect the application, then it is reasonable to argue that an effective interface is one the helps you fill in forms really well. How the interface helps you fill in the forms is probably a more complicated topic, however I think that some very desirable characteristics of form filling assistants (interfaces) is that they give you relevant information that will help you make decisions on how to fill the form, and that they provide useful information on the state of the form you are filling.
+
+To come back to the example of deleting emails in an email client, I would argue that perhaps this interface\
+[image here]()
+because I think that the interface gives you information that you would like to know when you are trying to delete emails, such as email names, and timestamps, and it also helps you keep track of the state of the form in the sense that it shows you which emails are put into the delete-email form by highlighting the emails that you selected.
+
+Which is a rather long winded way of saying that
+- the UI oh the account assignment has the qualities of UI that I theorize are important but the same thing can be done with a simpler interface that is easier to program and test.

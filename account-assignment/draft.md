@@ -1,8 +1,8 @@
 # Interfaces as Assistants
 
 ### Table of Contents
-[Motivation](#interface-by-forms)
-[Interface by Forms](#interface-by-forms)
+[Motivation](#interface-by-forms)\
+[Interface by Forms](#interface-by-forms)\
 [Interface as an Assistant](#interface-as-an-assistant)
 
 ### Motivation <span id='1'></span>

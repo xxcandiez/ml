@@ -4,7 +4,7 @@
 [Motivation](#motivation)\
 [Interface by Forms](#interface-by-forms)\
 [Interface as an Assistant](#interface-as-an-assistant)\
-[Theory of Interfaces](#theory-of-interfaces)\
+[Theory of Interfaces](#theory-of-interfaces)
 
 ### Motivation <span id='1'></span>
 

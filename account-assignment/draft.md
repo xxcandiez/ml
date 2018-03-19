@@ -58,5 +58,6 @@ To come back to the example of deleting emails in an email client, I would argue
 [image here]()
 because I think that the interface gives you information that you would like to know when you are trying to delete emails, such as email names, and timestamps, and it also helps you keep track of the state of the form in the sense that it shows you which emails are put into the delete-email form by highlighting the emails that you selected.
 
-Which is a rather long winded way of saying that
-- the UI oh the account assignment has the qualities of UI that I theorize are important but the same thing can be done with a simpler interface that is easier to program and test.
+Which is a rather long winded way of saying that the UI oh the account assignment has the qualities of UI that I theorize are important but the same thing can be done with a simpler interface that is easier to program and test, important parts being that its easier to program and test.
+
+[image here]()

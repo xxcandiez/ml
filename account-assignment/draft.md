@@ -8,11 +8,18 @@
 
 ### Motivation <span id='1'></span>
 
-I remember someone made an observation about websites that went along the lines of "the only way a person would need to interact with a website is through forms". I think that there is truth to that observation in quite a literal sense, and that the observation is worth exploring further because it might be possible to build a theory of web interfaces from it.
+I remember someone made an observation about websites that went along the lines of "the only way a person would need to interact with a website is through forms". I think that there is truth to that observation in quite a literal sense, but I actually want to explore this observation further because I've actually been trying build a theory of interfaces from it in order to have a unified design language across an application that I'm working on.
 
 ### Interface by Forms
 
-Suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you could do is select the three emails by filling in the checkboxes on the correct lines, then clicking on the trash icon. Another way to make the same affect is to pull out the hypothetical delete-email form, and fill in the lines with the names e1, e2, e3.
+Suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you would do is select the three emails by checking the checkboxes corresponding to the three emails then clicking on the trash icon. Another way to cause the same affect is to pull out the hypothetical delete-email form,
+
+```
+Delete Emails Form:
+  emails:_____
+```
+
+and fill in the emails line with the names e1, e2, e3, then press the go button.
 
 Even for a more elaborate affect like if you are in a music player and you want to add a song to your current playlist, perhaps you can press the plus icon beside the song, or drag the song into the playlist area. Similarly, you can also pull out the hypothetical add-to-playlist form and fill in the name of the song that you want to add.
 

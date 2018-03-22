@@ -6,26 +6,26 @@
 [Interface as an Assistant](#interface-as-an-assistant)\
 [Theory of Interfaces](#theory-of-interfaces)
 
-### Motivation <span id='1'></span>
+### Motivation
 
 I remember someone made an observation about websites that went along the lines of "the only way a person would need to interact with a website is through forms". I think that there is truth to that observation in quite a literal sense, but I actually want to explore this observation further because I've actually been trying build a theory of interfaces from it in order to have a unified design language across an application that I'm working on.
 
 ### Interface by Forms
 
-Suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you would do is select the three emails by checking the checkboxes corresponding to the three emails then clicking on the trash icon. Another way to cause the same affect is to pull out the hypothetical delete-email form,
+Suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you would do is select the three emails by checking the corresponding checkboxes then clicking on the trash icon. However, you can imagine that another way to cause the same affect in the application is to pull out the hypothetical delete-email form, as shown
 
 ```
 Delete Emails Form:
-  emails:_____
+  emails(comma delimited):_____
 ```
 
-and fill in the emails line with the names e1, e2, e3, then press the go button.
+and fill in the emails line with 'e1, e2, e3,' then press the go button. So for relatively simple affects like deleting emails, we see that we can actually replace the interface with a form and the user will still be able to use the application as wanted.
 
-Even for a more elaborate affect like if you are in a music player and you want to add a song to your current playlist, perhaps you can press the plus icon beside the song, or drag the song into the playlist area. Similarly, you can also pull out the hypothetical add-to-playlist form and fill in the name of the song that you want to add.
+But even for a more elaborate affect, say if you are in a music player and you want to add a song to your current playlist. The most obvious way to do it is to press the plus icon (add to playlist button) beside the song, or drag the song into the 'playlist area'. Similarly, you can also pull out the hypothetical add-to-playlist form and fill in the name of the song that you want to add.
 
 Another compelling reason why I think that all interfaces have an equivalent form version because that is actually the only way that it can be implemented. That in the sense that for every single affect on the application, server and front-end come to an agreement on a form, which then will be submitted will be processed by server and will cause the effect on the application.
 
-### Interface as an Assistant <span id='3'></span>
+### Interface as an Assistant
 
 If we pretend that it is plausible for all UI to be replaced with forms, that begs the question "why do we have really elaborate interfaces anyways." I think that a possible way to look at is that elaborate interfaces act as assistants which help users fill in the forms more efficiently to affect the application.
 

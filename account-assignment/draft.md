@@ -12,7 +12,10 @@ I remember someone made an observation about websites that went along the lines 
 
 ### Interface by Forms
 
-Suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you would do is select the three emails by checking the corresponding checkboxes then clicking on the trash icon. However, you can imagine that another way to cause the same affect in the application is to pull out the hypothetical delete-email form, as shown
+When I was exploring the observation about interfaces, one of the main ideas that I was trying to develop was the idea that all interfaces have a form equivalent.
+
+To elaborate on that, suppose you are in an email client and you want to affect the application by deleting three emails named e1, e2, e3. Normally what you would do is select the three emails by checking the corresponding checkboxes then clicking on the trash icon. However, you can imagine that another way to cause the same affect in the application is to pull out the hypothetical delete-email form, as shown
+
 
 ```
 Delete Emails Form:
@@ -23,13 +26,13 @@ and fill in the emails line with 'e1, e2, e3,' then press the go button. So for 
 
 But even for a more elaborate affect, say if you are in a music player and you want to add a song to your current playlist. The most obvious way to do it is to press the plus icon (add to playlist button) beside the song, or drag the song into the 'playlist area'. Similarly, you can also pull out the hypothetical add-to-playlist form and fill in the name of the song that you want to add.
 
-Another compelling reason why I think that all interfaces have an equivalent form version because that is actually the only way that it can be implemented. That in the sense that for every single affect on the application, server and front-end come to an agreement on a form, which then will be submitted will be processed by server and will cause the effect on the application.
+Another compelling reason why I think that all interfaces have an equivalent form version because that is actually the only sensible way that it can be implemented technically speaking. That is in the sense that for every single affect on the application, server and front-end come to an agreement on a form, which then will be submitted will be processed by server and will cause the effect on the application,
 
 ### Interface as an Assistant
 
-If we pretend that it is plausible for all UI to be replaced with forms, that begs the question "why do we have really elaborate interfaces anyways." I think that a possible way to look at is that elaborate interfaces act as assistants which help users fill in the forms more efficiently to affect the application.
+However, if we say that all UI can be replaced with forms, that really begs the question "then why do we have interfaces other than forms." This question actually took me a while to figure out a, but I think one solution is to think of interfaces as assistants that help users fill in the forms of the application more efficiently.
 
-A good way to illustrate why I think this idea might have some truth to it is by looking at the scenario of moving a file into a folder. Suppose we have the following file structure.
+A good way to motivate this idea is by looking at the scenario of moving a file into a folder. Suppose we have the following file structure.
 
 ```
 /home
@@ -37,13 +40,13 @@ A good way to illustrate why I think this idea might have some truth to it is by
   my-file
 ```
 
-Suppose I would like to move the file my-file into the folder /my-folder. The most primitive way to do this is to run a terminal in the location of /home and use the command
+If you would like to move the file my-file into the folder /my-folder. The very low level way to do this is to run a terminal in the location of /home and use the command
 
 ```
->>> mv my-File my-folder/my-file
+>>> mv my-file my-folder/my-file
 ```
 
-This command calls the move executable (mv) and tells it to move the file my-file to the location my-folder/my-file. This is synonymous to pull out the move-file form and filling in the right parameters.
+This command calls the move executable (mv) and gives it the name of the file you want to move (my-file) and the location of where you want to move it (my-folder/my-file). This is synonymous to pull out the move-file form and filling in the right parameters.
 
 ```
 Move File Form:

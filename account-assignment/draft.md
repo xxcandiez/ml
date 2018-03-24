@@ -4,7 +4,7 @@
 [Motivation](#motivation)\
 [Interface by Forms](#interface-by-forms)\
 [Interface as an Assistant](#interface-as-an-assistant)\
-[Theory of Interfaces](#theory-of-interfaces)
+[Conclusions](#conclusions)
 
 ### Motivation
 
@@ -46,28 +46,18 @@ If you would like to move the file my-file into the folder /my-folder. The very 
 >>> mv my-file my-folder/my-file
 ```
 
-This command calls the move executable (mv) and gives it the name of the file you want to move (my-file) and the location of where you want to move it (my-folder/my-file). This is synonymous to pull out the move-file form and filling in the right parameters.
+This command calls the move executable (mv) and gives it the name of the file you want to move (my-file) and the location of where you want to move it (my-folder/my-file). This is synonymous to pulling out the move-file form and filling in the right parameters.
 
 ```
 Move File Form:
-  file: _____
-  to: _______
+  file: my-file
+  to: my-folder/my-file
 ```
 
-If you are in the file explorer on your computer, to if you want to move my-file into /my-folder what you would probably do is drag the icon that represents my-file onto to icon that represents /my-folder. However, since we know that under the hood the file is actually moved by the command mentioned earlier.
+If you are in the file explorer on your computer, to if you want to move my-file into /my-folder what you would probably do is drag the icon that represents my-file onto to icon that represents /my-folder. However, since we know that under the hood the file is actually moved by the command mentioned earlier, we know that we can interpret it as filling in a form. When you start to drag the my-file icon, the computer program opens the move-file form and fills in the file field with the string my-file, then when you hover over the /my-folder icon it fills in the to field with the string my-folder/my-file and finally when you drop the icon it presses the go button.
 
-I think that we can interpret it as follows, when you press on and start to drag the my-file icon, then computer program opens the move-file form and fills in the file: field with the string my-file, then when you move it over the hover over the /my-folder icon it fills in the to: field with the string /my-folder/my-file and finally when you drop the icon it presses the go button.
+Similarly if you want to create the same affect but you are on a mobile phone, you would probably open the mobile file explorer and navigate to the location of my-file, then select my-file and press the move button, the program then places you back to the home directory, and then you navigate to the folder you want to move the file into and press go to move the file. You can imagine that while you are working through the process that in the background the program fills in the move-file form for you.
 
-Similarly if you want to create the same affect but you are on a mobile phone,  you would probably open the mobile file explorer and navigate to the location of my-file, then select my-file and press the move button, the program then places you back to the home directory, and then you navigate to the folder you want to move the file into and press on it to move the file. You can imagine that while you are working through the process that in the background the program fills in the move-file form for you.
-
-### Theory of interfaces
+### Conclusions
 
 If we can accept that all interfaces can be reduced to a form, and that user interfaces are assistants that help you fill in forms to affect the application, then it is reasonable to argue that an effective interface is one the helps you fill in forms really well. How the interface helps you fill in the forms is probably a more complicated topic, however I think that some very desirable characteristics of form filling assistants (interfaces) is that they give you relevant information that will help you make decisions on how to fill the form, and that they provide useful information on the state of the form you are filling.
-
-To come back to the example of deleting emails in an email client, I would argue that perhaps this interface\
-[image here]()
-because I think that the interface gives you information that you would like to know when you are trying to delete emails, such as email names, and timestamps, and it also helps you keep track of the state of the form in the sense that it shows you which emails are put into the delete-email form by highlighting the emails that you selected.
-
-Which is a rather long winded way of saying that the UI oh the account assignment has the qualities of UI that I theorize are important but the same thing can be done with a simpler interface that is easier to program and test, important parts being that its easier to program and test.
-
-[image here]()

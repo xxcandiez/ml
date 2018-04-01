@@ -56,7 +56,9 @@ assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
 Now that we have this test case for our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong, we will explore those ideas further in the next section.
 
 ### Reliability and Continuous Delivery
+Before we write any UI tests, a question that we might want to answer is why do we want to write UI tests, and from what I've gathered, our automated UI testing project was intended reduce the amount of resources we needed in manual testing by having automated test developers automate manual test cases so that manual wouldn't need to run them anymore. Our experience with this project has actually shown that this was not necessarily a very good idea, but since its problems are not specific to UI testing I'm not going to talk about them. The other argument that I've heard others in our team say is that we need UI tests because you can't really be sure that the application works unless it works from the user's perspective, which I would agree with in the sense that under practical circumstances that statement is probably true.
 
+But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two difference respects,
 
 - incompatibility with continuous delivery (reliability and run time)
 - unreliability and run time

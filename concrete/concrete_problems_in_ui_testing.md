@@ -33,7 +33,6 @@ const okButton = () => $('[onClick="createDocument"]')
 ```
 
 Now that we have our selectors, we need to perform the action of creating a new document.
-
 ```
 // WebDriver actions are implemented as promises in Protractor
 await newDocumentButton().click()
@@ -44,7 +43,6 @@ await okButton().click()
 
 await driver.sleep(1000)// wait for server to create the new document
 ```
-
 Assuming that nothing went wrong, we now arrive in an application state where there is a new document in our engagement so we can do a DOM inspection to see if our create-document functionality worked, for a questionable definition of worked.
 
 ```

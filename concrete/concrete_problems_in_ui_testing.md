@@ -5,7 +5,7 @@
 [Pieces of the puzzle](#pieces-of-the-puzzle)\
 [Reliability and Continuous Delivery](#reliability-and-continuous-delivery)\
 [Scalability of UI Testing](#scalability)\
-[Alternate Proposals](#alternate-proposals)
+[Alternate Proposals](#alternate-proposals)\
 
 ### Motivation
 In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we might want to consider.

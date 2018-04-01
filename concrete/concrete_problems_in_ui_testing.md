@@ -11,6 +11,8 @@
 In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we might want to consider.
 
 ### Pieces of The Puzzle
+WebDriver is a wire protocol that can be used to control a web browser remotely, or through a script. ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. Using Protractor we can use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime (Node).
+
 - WebDriver is a wire protocol that's a w3c proposal
 - the protocol is designed to let a user remotely control a web browser
 - unsurprisingly some people thought that perhaps the WebDriver protocol could be used to automate UI testing and rightfully so because the WebDriver protocol can be a very useful tool for some aspects of test automation, but as we will see, it can also be horribly misused and cause a lot of problems just like object orientation but that's for another time.

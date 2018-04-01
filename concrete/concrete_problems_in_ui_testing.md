@@ -90,6 +90,8 @@ assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
 
 we should try to tackle the contrapositive case first, IF the create-document test case fails Then the create-document functionality is not working. The most obvious case would be if the selectors no longer valid, then the test case will fail when you try to get the element, and the rebuttal to that would be a false negative is not a big deal, and you can just update the selector and the test will work as intended again. To that I would say that false negatives might be worse than you think, see boy who cried wolf, and your neural net that falsely classified your patient's tumor as malignant, and while it is true that if your selector is not working you can just update it, we will see later that this is one thing that contributes to the scalability problems.
 
+Another way to get the contrapositive to not hold is if lets say we decided that the document name should be displayed as ```${id} - ${name}``` instead of ```${id} ${name}``` and you might think that its similar to the problem we had with the outdated selectors, and you might know that these types of problems occur when you try to build an application without any API guarantee, but more on that later.
+
 
 
 

@@ -49,8 +49,11 @@ Assuming that nothing went wrong, we now arrive in an application state where th
 
 ```
 const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
+
 assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
 ```
+
+Now that we have this test case on our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong and we will explore further in the next section.
 
 ### Reliability and Continuous Delivery
 - incompatibility with continuous delivery (reliability and run time)

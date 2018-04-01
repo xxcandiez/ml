@@ -1,12 +1,12 @@
 # Concrete Problems in UI Testing
 
 ### Table of Contents
-[Motivation]()
-[Pieces of the puzzle]()
-[What does it even do/isDisplayed]()
-[Reliability/Continuous Delivery]()
-[Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application]()
-[Alternate Proposals]()
+[Motivation]()<br>
+[Pieces of the puzzle]()<br>
+[What does it even do/isDisplayed]()<br>
+[Reliability/Continuous Delivery]()<br>
+[Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application]()<br>
+[Alternate Proposals]()<br>
 
 ### Motivation
 - In this following article I will try to motivate some of the problems with UI testing
@@ -23,6 +23,16 @@ In the following article I want give a high level overview of how UI testing wor
 - We write our tests using protractor which is a JS library that wraps a bunch of other libraries which eventually wraps an implementation of WebDriver chrome driver, this allows us to execute our test scripts from a node environment.
 
 - using the wire protocol we can perform actions such as find elements, click elements, fill forms.
-- so to test, we do some actions on the elements tben we inspect the dom
+- so to test, we do some actions on the elements then we inspect the dom
 
-### haHAA
+### Reliability of UI tests
+- first question is why one might want to write UI tests
+- idea is, to figure out if our application is actually working properly, we should run end to end tests, so that our tests actually run from the perspective of one of our users, which is actually not too bad of an idea if you get a human to run the tests
+- why might a UI test fail when the application still "works as intended"
+- why might a UI test pass when the application does not work as intended
+- one of the things we might decide to trade off when we do UI tests is perhaps cleanliness for the hope that we don't run into a situation where all of our tests pass but we still have a bug in the code, as we can see UI testing doesn't even solve that
+- race conditions
+
+### Scalability
+- why would you want to couple your application to a test suite
+-

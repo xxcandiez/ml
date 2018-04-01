@@ -1,22 +1,16 @@
 # Concrete Problems in UI Testing
 
 ### Table of Contents
-[Motivation]()<br>
-[Pieces of the puzzle]()<br>
-[What does it even do/isDisplayed]()<br>
-[Reliability/Continuous Delivery]()<br>
-[Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application]()<br>
-[cost]()<br>
-[Alternate Proposals]()<br>
+[Motivation](#motivation)\
+[Pieces of the puzzle](#pieces-of-the-puzzle)\
+[Reliability and Continuous Delivery](#reliability-and-continuous-delivery)\
+[Scalability of UI Testing](#scalability)\
+[Alternate Proposals](#alternate-proposals)
 
 ### Motivation
-- In this following article I will try to motivate some of the problems with UI testing
-- cost of ownership and adding new test cases every sprint
-- incompatibility with continuous delivery (reliability and run time)
+In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we might want to consider.
 
-In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we can consider to UI testing for CD.
-
-### Pieces of The Puzzle (How does it work?)
+### Pieces of The Puzzle
 - WebDriver is a wire protocol that's a w3c proposal
 - the protocol is designed to let a user remotely control a web browser
 - unsurprisingly some people thought that perhaps the WebDriver protocol could be used to automate UI testing and rightfully so because the WebDriver protocol can be a very useful tool for some aspects of test automation, but as we will see, it can also be horribly misused and cause a lot of problems just like object orientation but that's for another time.
@@ -26,7 +20,10 @@ In the following article I want give a high level overview of how UI testing wor
 - using the wire protocol we can perform actions such as find elements, click elements, fill forms.
 - so to test, we do some actions on the elements then we inspect the dom
 
-### Reliability of UI tests
+### Reliability and Continuous Delivery
+- incompatibility with continuous delivery (reliability and run time)
+- unreliability and run time
+
 - first question is why one might want to write UI tests
 - idea is, to figure out if our application is actually working properly, we should run end to end tests, so that our tests actually run from the perspective of one of our users, which is actually not too bad of an idea if you get a human to run the tests
 - why might a UI test fail when the application still "works as intended"
@@ -34,7 +31,10 @@ In the following article I want give a high level overview of how UI testing wor
 - one of the things we might decide to trade off when we do UI tests is perhaps cleanliness for the hope that we don't run into a situation where all of our tests pass but we still have a bug in the code, as we can see UI testing doesn't even solve that
 - race conditions causes innate flakiness, point out that google engineers also report significant flakiness in their tests, its not a trivial task to say, just write your tests so that they are reliable, fan fan pointed out that the sleep times in WebDriver is not tied to how fast the browser running, its just a static sleep time.
 
-### Scalability
+### Scalability of UI Testing
+- cost of ownership and adding new test cases every sprint
+- Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application
+
 - why would you want to couple your application to a test suite
 - absurdly long run times
 - does not react well to change, UI testing essentially involves writing an application on top of your existing application, but unlike writing an application on top of an API, you actually have no guarantees about how the application is going to behave
@@ -49,8 +49,11 @@ In the following article I want give a high level overview of how UI testing wor
 - cost of maintenance, these properties of UI tests make them so expensive to do
 - its one of the reasons why I always seem apprehensive to add more UI tests into our test suites, because the cost of maintaining each one is so high, and the cost of maintenance for each test cases becomes higher the more test cases you have, I honestly believe that I am doing more harm than good by adding new test cases into our test suites.
 - cost of babysitting your test cases, (new dev put it really nicely, essentially a manual task)
-- from a development perspective slow feedback times, (1-5 mins), there is so much wasted time in UI test development
+- from a development perspective slow feedback times, (1-5 minutes), there is so much wasted time in UI test development
 
-### Alternatives
+### Alternate Proposals
 - hopefully my arguments about why the current way we are doing the thing is not compatible with thing CD thing
-$\lambda$
+- use UI testing for smoke testing, use a test suite that is at most 100 (arbitrary number) tests
+- we want the smoke test to run in at most 15 minutes, with some architecture improvements I think its possible.
+- manual testing is for sanity testing the new features, and exploratory testing
+- test development efforts can be redirected to unit test development, the only integrated testing that should be done is if client code can talk to the server properly, done from a run time level.

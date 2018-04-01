@@ -11,16 +11,41 @@
 In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we might want to consider.
 
 ### Pieces of The Puzzle
-WebDriver is a wire protocol that can be used to control a web browser remotely, or through a script. ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. Using Protractor we can use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime (Node).
+WebDriver is a wire protocol that can be used to control a web browser remotely, or through a script. ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. Using Protractor we can use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime.
 
-- WebDriver is a wire protocol that's a w3c proposal
-- the protocol is designed to let a user remotely control a web browser
-- unsurprisingly some people thought that perhaps the WebDriver protocol could be used to automate UI testing and rightfully so because the WebDriver protocol can be a very useful tool for some aspects of test automation, but as we will see, it can also be horribly misused and cause a lot of problems just like object orientation but that's for another time.
+Armed with the knowledge that we can control a browser from a JavaScript runtime, we might think that we should consider writing automated end-to-end tests on our application. This sounds like a really good idea, but just like object orientation it can also be horribly misused and cause unpleasant things to happen, we will explore this idea further.
 
-- We write our tests using protractor which is a JS library that wraps a bunch of other libraries which eventually wraps an implementation of WebDriver chrome driver, this allows us to execute our test scripts from a node environment.
+Using the WebDriver protocol, our tests follow the general pattern of, do some setup by navigating on pages or clicking on buttons, or filling in forms, then inspect the DOM and make assertions based on the state of the DOM.
 
-- using the wire protocol we can perform actions such as find elements, click elements, fill forms.
-- so to test, we do some actions on the elements then we inspect the dom
+To give a better idea about how we can use these tools lets say that we want to check if the create-document functionality in SE is working. Assuming that you are in the documents page of SE, we can choose which DOM elements we want to interact with by using CSS selectors, so we can first declare some variables that will be our DOM elements.
+
+```
+const name = 'myName'
+const id = 'myId'
+
+// these are hypothetical selectors that we might use
+//in practice we would probably declare these as getters in some class
+const newDocumentButton = () => $('#newDocumentButton')
+const checklistOption = () => $('.docuemntAdder.checklist')
+const nameField = () => $('.documentName')
+const idField = () => $('#documentId')
+const okButton = () => $('[onClick="createDocument"]')
+```
+
+Now that we have our selectors, we need to perform the action of creating a new document.
+
+```
+// WebDriver actions are implemented as promises in Protractor
+await newDocumentButton().click()
+await checklistOption().click()
+await nameField().clear().sendKeys(name)
+await idField().clear().sendKeys(id)
+await okButton().click()
+
+await driver.sleep(1000)// wait for server to create the new document
+```
+
+
 
 ### Reliability and Continuous Delivery
 - incompatibility with continuous delivery (reliability and run time)

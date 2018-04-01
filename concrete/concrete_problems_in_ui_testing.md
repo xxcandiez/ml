@@ -45,7 +45,12 @@ await okButton().click()
 await driver.sleep(1000)// wait for server to create the new document
 ```
 
+Assuming that nothing went wrong, we now arrive in an application state where there is a new document in our engagement so we can do a DOM inspection to see if our create-document functionality worked, for a questionable definition of worked.
 
+```
+const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
+assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
+```
 
 ### Reliability and Continuous Delivery
 - incompatibility with continuous delivery (reliability and run time)

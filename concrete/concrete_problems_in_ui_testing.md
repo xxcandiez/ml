@@ -49,7 +49,6 @@ Assuming that nothing went wrong, we now arrive in an application state where th
 
 ```
 const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
-
 assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
 ```
 
@@ -58,7 +57,38 @@ Now that we have this test case for our create-document functionality, IF this t
 ### Reliability and Continuous Delivery
 Before we write any UI tests, a question that we might want to answer is why do we want to write UI tests, and from what I've gathered, our automated UI testing project was intended reduce the amount of resources we needed in manual testing by having automated test developers automate manual test cases so that manual wouldn't need to run them anymore. Our experience with this project has actually shown that this was not necessarily a very good idea, but since its problems are not specific to UI testing I'm not going to talk about them. The other argument that I've heard others in our team say is that we need UI tests because you can't really be sure that the application works unless it works from the user's perspective, which I would agree with in the sense that under practical circumstances that statement is probably true.
 
-But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two difference respects,
+But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two different respects in that there is reliability in the sense of to what degree can we trust our test results, as well as reliability in the sense of how often will a test suite blow up because the act of using WebDriver to control a browser through a script is essentially a non deterministic action from the perspective of the us the programmer.
+
+To get back to what might be wrong with UI testing in our first section, lets try to answer the question of that IF our create-document test case passes THEN our create-document functionality is working and its contrapositive are true statements, because if its really easy to get into a situation where this doesn't hold, then perhaps we cannot trust the results of our UI tests.
+
+Lets take a look at our toy example again,
+
+```
+const name = 'myName'
+const id = 'myId'
+
+// these are hypothetical selectors that we might use
+//in practice we would probably declare these as getters in some class
+const newDocumentButton = () => $('#newDocumentButton')
+const checklistOption = () => $('.docuemntAdder.checklist')
+const nameField = () => $('.documentName')
+const idField = () => $('#documentId')
+const okButton = () => $('[onClick="createDocument"]')
+
+// WebDriver actions are implemented as promises in Protractor
+await newDocumentButton().click()
+await checklistOption().click()
+await nameField().clear().sendKeys(name)
+await idField().clear().sendKeys(id)
+await okButton().click()
+
+await driver.sleep(1000)// wait for server to create the new document
+
+const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
+assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
+```
+
+
 
 - incompatibility with continuous delivery (reliability and run time)
 - unreliability and run time

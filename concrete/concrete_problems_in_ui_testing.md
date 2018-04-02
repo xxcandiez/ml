@@ -79,26 +79,9 @@ I think that there are mainly two problems we run into when we try to scale up U
 
 There are a few different ways to think about why the cost of owning UI tests are quite high, the more obvious way is to observe that UI tests only work on a specific implementation of the UI, so if the UI is altered there it is often necessary to update the test to reflect the changes, even if the functionality remains the same. However, a more helpful way to look at it that our UI tests are actually an application that is built on top of the API that is the UI of the SE platform, but what's different is that we don't have an API guarantee because the UI is always changing.
 
-In general, sane developers would refuse to build an application on an API that might change, because when the their application gets sufficiently complicated, a seemingly small change in the API contract could completely brick their application. To give a concrete example of this, I would argue that our current UI tests application is actually constantly in various degrees of bricked, as at any given time about a quarter to half of our tests are not working, and this problem is exacerbated when new UI tests are continuously being added to our test suites. Due to the absurdly high cost of owning UI tests (the time it takes to maintain them and get broken test cases working again), in my own experience we are actually spending less than half of our work time on sprint work but instead trying to pay the cost of just having the tests.
+In general, sane developers would refuse to build an application on an API that might change, because when the their application gets sufficiently complicated, a seemingly small change in the API contract could completely brick their application. To give a concrete example of this, I would argue that our current UI tests application is actually constantly in various degrees of bricked, as at any given time about as quarter to half of our tests are not working, and this problem is exacerbated when new UI tests are continuously being added to our test suites. Due to the absurdly high cost of owning UI tests (the time it takes to maintain them and get broken test cases working again), in my own experience we are actually spending less than half of our work time on sprint work but instead trying to pay the cost of just having the tests.
 
-- cost of ownership and adding new test cases every sprint
-- Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application
-
-- why would you want to couple your application to a test suite
-- absurdly long run times
-- does not react well to change, UI testing essentially involves writing an application on top of your existing application, but unlike writing an application on top of an API, you actually have no guarantees about how the application is going to behave
-- essentially like writing an application with no API guarantee
-- a concrete example of this is when the done button was replaced by a toggling edit button
-- an example of a small change that would actually completely brick our project, is if you changed the behaviour of entering a newly created document to not enter into edit mode by default, since there are so many places in our scripts that implicitly rely on the fact that it does
-- something changed in checklists from a DOM perspective and its actually going to take multiple weeks to fix.
-- the reason why this thing happens in UI testing is because of interface vs implementation testing.
-- the way that we check if the add document functionality works is by pressing some buttons then checking if a ceretain list in the DOM now contains the text of the new document name. this is similar to testing a add function for instance by checking that the function has a return statement, takes two parameters, and uses the '+' symbol once in the source code, it is just completely absurd
-- how is this going to work in conjunction of the reliability problem in CD, if we wait for the tests to run for 4 hours, then let the QA team investigate the failures for the 40 failed tests over the next 2-3 days, that's not exactly CD.
-
-- cost of maintenance, these properties of UI tests make them so expensive to do
-- its one of the reasons why I always seem apprehensive to add more UI tests into our test suites, because the cost of maintaining each one is so high, and the cost of maintenance for each test cases becomes higher the more test cases you have, I honestly believe that I am doing more harm than good by adding new test cases into our test suites.
-- cost of babysitting your test cases, (new dev put it really nicely, essentially a manual task)
-- from a development perspective slow feedback times, (1-5 minutes), there is so much wasted time in UI test development
+The other problem with trying to scale UI testing is in a sense the time it takes to run the tests, but not exactly because if we could setup some UI testing system that could tell you if a build is good to release in 3 hours (the current time it takes to run our automated regression suite) I think it would actually be a pretty good deal. The problem actually come when you try to run a non deterministic system for 3 hours a pray that nothing will go wrong, which never actually happens because in practice about 10% of tests will fail just due to random non deterministic effects which will then require you to spend the next few hours trying to troubleshoot the failed tests and at this point its already incompatible with continuous delivery.
 
 ### Alternate Proposals
 - hopefully my arguments about why the current way we are doing the thing is not compatible with thing CD thing

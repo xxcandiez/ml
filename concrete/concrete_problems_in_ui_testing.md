@@ -3,7 +3,7 @@
 ### Table of Contents
 [Motivation](#motivation)\
 [Pieces of the puzzle](#pieces-of-the-puzzle)\
-[Reliability and Continuous Delivery](#reliability-and-continuous-delivery)\
+[Quality of Test Results](#quality-of-test-results)\
 [Scalability of UI Testing](#scalability)\
 [Alternate Proposals](#alternate-proposals)
 
@@ -52,62 +52,32 @@ const documentNamesContainer = () => $('#allDocuments')// element that contains 
 assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
 ```
 
-Now that we have this test case for our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong, we will explore those ideas further in the next section.
+Now that we have this test case for our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong, we will explore those ideas further later on.
 
-### Reliability and Continuous Delivery
+### Quality of Test Results
 Before we write any UI tests, a question that we might want to answer is why do we want to write UI tests, and from what I've gathered, our automated UI testing project was intended reduce the amount of resources we needed in manual testing by having automated test developers automate manual test cases so that manual wouldn't need to run them anymore. Our experience with this project has actually shown that this was not necessarily a very good idea, but since its problems are not specific to UI testing I'm not going to talk about them. The other argument that I've heard others in our team say is that we need UI tests because you can't really be sure that the application works unless it works from the user's perspective, which I would agree with in the sense that under practical circumstances that statement is probably true.
 
 But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two different respects in that there is reliability in the sense of to what degree can we trust our test results, as well as reliability in the sense of how often will a test suite blow up because the act of using WebDriver to control a browser through a script is essentially a non deterministic action from the perspective of the us the programmer.
 
 To get back to what might be wrong with UI testing in our first section, lets try to answer the question of that IF our create-document test case passes THEN our create-document functionality is working and its contrapositive are true statements, because if its really easy to get into a situation where this doesn't hold, then perhaps we cannot trust the results of our UI tests.
 
-Lets take a look at our toy example again,
+Looking at the contrapositive case, IF the create-document test case fails Then the create-document functionality is not working. The most obvious way to try and make this untrue would be if the element selectors are no longer valid, then the test case will fail when you try to get the element, and the rebuttal to that would be a false negative is not a big deal, and you can just update the selector and the test will work as intended again. To that I would say that false negatives might be worse than you think, see boy who cried wolf, and a neural net that falsely classifies a patient's tumor as malignant, and while it is true that if your selector is not working you can just update it, we will see later that this is one thing that contributes to the scalability problems. Another way to get the contrapositive to not hold is if we decided that the document name should be displayed as ```${id} - ${name}``` instead of ```${id} ${name}``` and you might think that its similar to the problem we had with the outdated selectors, and you might know that these types of problems occur when you try to build an application without an API guarantee, but more on that later.
+
+Now to look at how we might get a false positive in UI testing, this time around we are going to use an example of checking if the lockdown functionality for engagements is working. Lets say that the requirements for lockdown is that you can no longer edit the names, or create issues for documents. It might seem somewhat reasonable that we check if this requirement is fulfilled by seeing if the edit name and add issue buttons are there so after entering lockdown mode our checks are
 
 ```
-const name = 'myName'
-const id = 'myId'
-
-// these are hypothetical selectors that we might use
-//in practice we would probably declare these as getters in some class
-const newDocumentButton = () => $('#newDocumentButton')
-const checklistOption = () => $('.docuemntAdder.checklist')
-const nameField = () => $('.documentName')
-const idField = () => $('#documentId')
-const okButton = () => $('[onClick="createDocument"]')
-
-// WebDriver actions are implemented as promises in Protractor
-await newDocumentButton().click()
-await checklistOption().click()
-await nameField().clear().sendKeys(name)
-await idField().clear().sendKeys(id)
-await okButton().click()
-
-await driver.sleep(1000)// wait for server to create the new document
-
-const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
-assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
+assert.false(editNameButton().isPresent())
+assert.false(createIssueButton().isPresent())
 ```
 
-we should try to tackle the contrapositive case first, IF the create-document test case fails Then the create-document functionality is not working. The most obvious case would be if the selectors no longer valid, then the test case will fail when you try to get the element, and the rebuttal to that would be a false negative is not a big deal, and you can just update the selector and the test will work as intended again. To that I would say that false negatives might be worse than you think, see boy who cried wolf, and your neural net that falsely classified your patient's tumor as malignant, and while it is true that if your selector is not working you can just update it, we will see later that this is one thing that contributes to the scalability problems.
+at first glance this seems reasonable, but if the selectors for editNameButton and createIssueButton change and then some time down the road the lockdown functionality stops working, this test case will still pass.
 
-Another way to get the contrapositive to not hold is if lets say we decided that the document name should be displayed as ```${id} - ${name}``` instead of ```${id} ${name}``` and you might think that its similar to the problem we had with the outdated selectors, and you might know that these types of problems occur when you try to build an application without any API guarantee, but more on that later.
+The obvious fix for this test case would be first assert that the two buttons were there, then enter lockdown mode, then assert that the two button aren't there anymore. And actually it won't actually doesn't work because I tried doing that and there is some convoluted reason why certain implementations for hiding the buttons won't work with the solution whether the solution works or not is not even that important. The important part is actually that its not obvious that the test case has this weakness in the first place because while we know the problem in hindsight, we've actually at one point our entire team came together and talked about this problem, and no one noticed it, and personally it wasn't until the third time that I worked on this code in this area that I noticed the problem. So in this case, this test case would have been giving us false positives if the lockdown functionality had been broken in any time in the last few months.
 
-
-
-
-
-
-- incompatibility with continuous delivery (reliability and run time)
-- unreliability and run time
-
-- first question is why one might want to write UI tests
-- idea is, to figure out if our application is actually working properly, we should run end to end tests, so that our tests actually run from the perspective of one of our users, which is actually not too bad of an idea if you get a human to run the tests
-- why might a UI test fail when the application still "works as intended"
-- why might a UI test pass when the application does not work as intended
-- one of the things we might decide to trade off when we do UI tests is perhaps cleanliness for the hope that we don't run into a situation where all of our tests pass but we still have a bug in the code, as we can see UI testing doesn't even solve that
-- race conditions causes innate flakiness, point out that google engineers also report significant flakiness in their tests, its not a trivial task to say, just write your tests so that they are reliable, fan fan pointed out that the sleep times in WebDriver is not tied to how fast the browser running, its just a static sleep time.
+The final point that ties into this idea is reliability of our tools, so if all of our test cases are correct, and all selectors up to date, what percentage of tests will still fail due to non determinism in the UI tests. It turns out that its about 10%, so we can expect at least about 45 of our 450 UI tests to be failing for a build that is supposedly working as intended.
 
 ### Scalability of UI Testing
+
 - cost of ownership and adding new test cases every sprint
 - Scalability/Effort/Value prop/interface vs implementation/absurdity of application on application
 

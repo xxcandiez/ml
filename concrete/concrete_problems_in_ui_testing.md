@@ -8,7 +8,9 @@
 [Alternate Proposals](#alternate-proposals)
 
 ### Motivation
-In the following article I want give a high level overview of how UI testing works, and also motivate some problems with UI testing, some reasons why our UI tests won't necessarily be compatible with continuous delivery, and some possible alternatives we might want to consider.
+In the following article, I want to try and motivate the argument that large scale automation of UI tests won't let the SE product do continuous delivery, and also lay some groundwork for some future discussions about alternate strategies.
+
+In order to motivate my argument, I want to first give a high level overview of the machinery that allows us to do automated UI testing, then talk about two potential problem classes that we tend to run into when trying to deploy automated UI tests on a large scale, and then end off with some ideas about how we might solve testing SE.
 
 ### Pieces of The Puzzle
 WebDriver is a wire protocol that can be used to control a web browser remotely, or through a script. ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. Using Protractor we can use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime.

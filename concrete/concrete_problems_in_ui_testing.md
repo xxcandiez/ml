@@ -3,6 +3,7 @@
 ### Table of Contents
 [Motivation](#motivation)\
 [Pieces of the puzzle](#pieces-of-the-puzzle)\
+[Toy Example](#toy-example)\
 [Quality of Test Results](#quality-of-test-results)\
 [Scalability of UI Testing](#scalability)\
 [Alternate Proposals](#alternate-proposals)
@@ -13,45 +14,103 @@ In the following article, I want to try and motivate the argument that large sca
 In order to motivate my argument, I want to first give a high level overview of the machinery that allows us to do automated UI testing, then talk about two potential problem classes that we tend to run into when trying to deploy automated UI tests on a large scale, and then end off with some ideas about how we might solve testing SE.
 
 ### Pieces of The Puzzle
-WebDriver is a wire protocol that can be used to control a web browser remotely, or through a script. ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. Using Protractor we can use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime.
+All of our UI tests are built on top of WebDriver, which is a wire protocol that can be used to control a web browser remotely through a script (or just a cli). ChromeDriver implements the WebDriver protocol for the Chrome browser, Selenium provides JavaScript language bindings to a WebDriver API, and Protractor uses Selenium's JavaScript bindings and adds some Angular specific features. We use Protractor to use the WebDriver protocol to control the browser by running scripts in a JavaScript runtime.
 
-Armed with the knowledge that we can control a browser from a JavaScript runtime, we might think that we should consider writing automated end-to-end tests on our application. This sounds like a really good idea, but just like object orientation it can also be horribly misused and cause unpleasant things to happen, we will explore this idea further.
+Now that we can control a browser from a JavaScript runtime, we might think that we should consider writing automated end-to-end tests on our application. Using the WebDriver protocol, our tests follow the general pattern of, do some setup by navigating to pages, or clicking on buttons, or filling in forms, and then inspect the DOM and make assertions based on the state of it.
 
-Using the WebDriver protocol, our tests follow the general pattern of, do some setup by navigating on pages or clicking on buttons, or filling in forms, then inspect the DOM and make assertions based on the state of the DOM.
+### Toy Example
 
 To give a better idea about how we can use these tools lets say that we want to check if the create-document functionality in SE is working. Assuming that you are in the documents page of SE, we can choose which DOM elements we want to interact with by using CSS selectors, so we can first declare some variables that will be our DOM elements.
 
-```
-const name = 'myName'
-const id = 'myId'
+To help us talk about automated UI testing more clearly a toy example of an automated UI test that tests if one acceptance criteria of engagement lockdown is working, we can pretend that the code works as intended.
 
-// these are hypothetical selectors that we might use
-//in practice we would probably declare these as getters in some class
-const newDocumentButton = () => $('#newDocumentButton')
-const checklistOption = () => $('.docuemntAdder.checklist')
-const nameField = () => $('.documentName')
-const idField = () => $('#documentId')
-const okButton = () => $('[onClick="createDocument"]')
-```
+To work this example we're first going to define 3 classes, DocumentRow, Navbar, and EngagementProperties, we say that Navbar contains EngagementProperties.
 
-Now that we have our selectors, we need to perform the action of creating a new document.
+
+##### Class Declarations
 
 ```
-// WebDriver actions are implemented as promises in Protractor
-await newDocumentButton().click()
-await checklistOption().click()
-await nameField().clear().sendKeys(name)
-await idField().clear().sendKeys(id)
-await okButton().click()
+class Navbar {
+  get root () {
+    return $('#navbar')
+  }
 
-await driver.sleep(1000)// wait for server to create the new document
+  get EngagementProperties () {
+    return new EngagementProperties(this.root.$('#engagementPanelContainer'))
+  }
+}
+
+class EngagementProperties () {
+  constructor (root) {
+    this.root = root
+  }
+
+  get engagementPanelToggle () {
+    return this.root.$('#engagmentPanelToggle')
+  }
+
+  get engagementPanel () {
+    return this.root.$('#engagementPanel')
+  }
+
+  get lockdownButton () {
+    return this.root.$('#lockdownButton')
+  }
+
+  async openEngagementPanel () {
+    let opened = this.engagementPanel.isOpen();
+    return !opened && engagementPanelToggle.click();
+  }
+
+  async enterLockdownMode () {
+    this.openEngagementPanel()
+    return this.lockdownButton.click();
+  }
+}
+
+class DocumentManager {
+  get root () {
+    return $('#documentManager')
+  }
+
+  getDocumentRowByName(name) {
+    return this.root = element(by.cssContainingText('#document', name))
+  }
+}
+
+class DocumentRow {
+  constructor (root) {
+    this.root = root
+  }
+
+  get editButton() {
+    return this.root.$('#editButton')
+  }
+
+  get issuesButton() {
+    return this.root.$('#issuesButton')
+  }
+}
 ```
 
-Assuming that nothing went wrong, we now arrive in an application state where there is a new document in our engagement so we can do a DOM inspection to see if our create-document functionality worked, for a questionable definition of worked.
+##### Test
 
 ```
-const documentNamesContainer = () => $('#allDocuments')// element that contains of all document names in text
-assert.isTrue(documentNamesContainer().getText().contains(`${id} ${name}`))
+describe('lockdown', () => {
+  it('should disable editing and adding issues to documents after lockdown', () => {
+      // declare stuff we need
+      let defaultDocument = new DocumentManager.getDocumentRowByName('default document')
+      let engagementPanel = new Navbar().engagementPanel
+
+      // setup
+      engagementPanel.openEngagementPanel()
+      engagementPanel.lockdownButton.click()
+
+      // inspect the DOM
+      assert.isFalse(defaultDocument.editButton.isPresent())
+      assert.isFalse(defaultDocument.issuesButton.isPresent())
+    })
+})
 ```
 
 Now that we have this test case for our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong, we will explore those ideas further later on.

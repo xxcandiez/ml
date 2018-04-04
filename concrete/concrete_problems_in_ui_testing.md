@@ -24,8 +24,7 @@ To give a better idea about how we can use these tools lets say that we want to 
 
 To help us talk about automated UI testing more clearly a toy example of an automated UI test that tests if one acceptance criteria of engagement lockdown is working, we can pretend that the code works as intended.
 
-To work this example we're first going to define 3 classes, DocumentRow, Navbar, and EngagementProperties, we say that Navbar contains EngagementProperties.
-
+To work this example we're first going to define 3 classes, DocumentRow, Navbar, and EngagementProperties, we say that Navbar contains EngagementProperties. You can skip the class declarations don't feel like going through the code.
 
 ##### Class Declarations
 
@@ -113,9 +112,12 @@ describe('lockdown', () => {
 })
 ```
 
-Now that we have this test case for our create-document functionality, IF this test case passes THEN our create-document functionality is definitely working, and the contrapositive also holds, right? Well actually that's necessarily true, and you may already have reasons in mind about what may go wrong, we will explore those ideas further later on.
+This test case would probably be used to check the acceptance critera "users should not be able to edit or add issues to documents in lockdown mode." What this test does is it keeps track of the state of the edit button and issues button of a DocumentRow in the document manager, it checks that in lockdown mode there is no edit or issues button for the user to use.
 
 ### Quality of Test Results
+
+
+
 Before we write any UI tests, a question that we might want to answer is why do we want to write UI tests, and from what I've gathered, our automated UI testing project was intended reduce the amount of resources we needed in manual testing by having automated test developers automate manual test cases so that manual wouldn't need to run them anymore. Our experience with this project has actually shown that this was not necessarily a very good idea, but since its problems are not specific to UI testing I'm not going to talk about them. The other argument that I've heard others in our team say is that we need UI tests because you can't really be sure that the application works unless it works from the user's perspective, which I would agree with in the sense that under practical circumstances that statement is probably true.
 
 But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two different respects in that there is reliability in the sense of to what degree can we trust our test results, as well as reliability in the sense of how often will a test suite blow up because the act of using WebDriver to control a browser through a script is essentially a non deterministic action from the perspective of the us the programmer.

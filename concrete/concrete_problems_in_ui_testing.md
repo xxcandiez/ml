@@ -170,10 +170,8 @@ If you look back to the class declarations for our toy example, you may notice t
 This is synonymous to having API that your application relies on randomly change, and depending on how large your application is or how much of your application relies on the assumption that the API behaves in a certain way, its possible that the change can brick your application.
 
 ### Alternate Proposals
+If you subscribe to my arguments it would seem that trying to scale up the automated UI testing actually doesn't work with continuous delivery because there is still a bottleneck in testing since due to all of the UI changes that happen, anywhere from 25-50% of our test scripts are not functional. In the best case scenario where the tests are all functional about 10% of them will fail and have to be manually verified just due to random non determinism, and even without that the test results are still unreliable since we have no feasible way to detect false negatives.
 
+I think that automated UI test can still be useful for smoke testing, because given its problems in scalability I think that a small suite of about 100 (completely arbitrary number) test cases can be used to test some core functionality though the UI.
 
-- hopefully my arguments about why the current way we are doing the thing is not compatible with thing CD thing
-- use UI testing for smoke testing, use a test suite that is at most 100 (arbitrary number) tests
-- we want the smoke test to run in at most 15 minutes, with some architecture improvements I think its possible.
-- manual testing is for sanity testing the new features, and exploratory testing
-- test development efforts can be redirected to unit test development, the only integrated testing that should be done is if client code can talk to the server properly, done from a run time level.
+For testing the rest of the application I think that its really important to have a test suite that is fast, and doesn't require a large amount of time put into maintenance just to have a reasonable portion of the tests to work. I think that a reasonable option would be to implement a series of unit and integration tests, I would recommend a talk by J.B. Rainsberger, [Integrated Tests Are a Scam](https://vimeo.com/80533536).

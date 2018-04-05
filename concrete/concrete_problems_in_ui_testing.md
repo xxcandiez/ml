@@ -163,6 +163,12 @@ assert.isFalse(await defaultDocument.issuesButton.isPresent())
 Our updated test case can actually still enter a tautology state when there is a new update, because the update changed the selectors for the edit and issues buttons, and even if the new button are there are can still be used in lockdown mode, our test says that the old buttons aren't present so everything is fine.
 
 ### Scalability of UI Testing
+When it comes to problems about scaling automated UI tests, I think that the largest problem is that the cost of maintenance quickly becomes unsustainable, mostly due to the need to rewrite test cases on UI updates. To get back to the point I made earlier that to fix a false positive tests case you just need to update the scripts, but the problem is that updating the scripts is actually not straight forward, and becomes more difficult to update the scripts the larger your test suite is.
+
+If you look back to the class declarations for our toy example, you may notice that we are essentially building controllers from the user's perspective on top of the application. The problem come when the UI is updated and you need to update the scripts, but its not a trivial task because there are assumptions about the UI that our controllers make that are so deeply built into our code, that even seemingly innocuous changes to the UI can take up all of a test developer's time for a sprint.
+
+
+
 I think that there are mainly two problems we run into when we try to scale up UI testing to encompass an entire regression suite. The more one being the cost of owning UI tests, and the second being the time it takes to run the tests.
 
 There are a few different ways to think about why the cost of owning UI tests are quite high, the more obvious way is to observe that UI tests only work on a specific implementation of the UI, so if the UI is altered there it is often necessary to update the test to reflect the changes, even if the functionality remains the same. However, a more helpful way to look at it that our UI tests are actually an application that is built on top of the API that is the UI of the SE platform, but what's different is that we don't have an API guarantee because the UI is always changing.

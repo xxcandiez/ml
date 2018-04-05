@@ -167,17 +167,11 @@ When it comes to problems about scaling automated UI tests, I think that the lar
 
 If you look back to the class declarations for our toy example, you may notice that we are essentially building controllers from the user's perspective on top of the application. The problem come when the UI is updated and you need to update the scripts, but its not a trivial task because there are assumptions about the UI that our controllers make that are so deeply built into our code, that even seemingly innocuous changes to the UI can take up all of a test developer's time for a sprint.
 
-
-
-I think that there are mainly two problems we run into when we try to scale up UI testing to encompass an entire regression suite. The more one being the cost of owning UI tests, and the second being the time it takes to run the tests.
-
-There are a few different ways to think about why the cost of owning UI tests are quite high, the more obvious way is to observe that UI tests only work on a specific implementation of the UI, so if the UI is altered there it is often necessary to update the test to reflect the changes, even if the functionality remains the same. However, a more helpful way to look at it that our UI tests are actually an application that is built on top of the API that is the UI of the SE platform, but what's different is that we don't have an API guarantee because the UI is always changing.
-
-In general, sane developers would refuse to build an application on an API that might change, because when the their application gets sufficiently complicated, a seemingly small change in the API contract could completely brick their application. To give a concrete example of this, I would argue that our current UI tests application is actually constantly in various degrees of bricked, as at any given time about as quarter to half of our tests are not working, and this problem is exacerbated when new UI tests are continuously being added to our test suites. Due to the absurdly high cost of owning UI tests (the time it takes to maintain them and get broken test cases working again), in my own experience we are actually spending less than half of our work time on sprint work but instead trying to pay the cost of just having the tests.
-
-The other problem with trying to scale UI testing is in a sense the time it takes to run the tests, but not exactly because if we could setup some UI testing system that could tell you if a build is good to release in 3 hours (the current time it takes to run our automated regression suite) I think it would actually be a pretty good deal. The problem actually come when you try to run a non deterministic system for 3 hours a pray that nothing will go wrong, which never actually happens because in practice about 10% of tests will fail just due to random non deterministic effects which will then require you to spend the next few hours trying to troubleshoot the failed tests and at this point its already incompatible with continuous delivery.
+This is synonymous to having API that your application relies on randomly change, and depending on how large your application is or how much of your application relies on the assumption that the API behaves in a certain way, its possible that the change can brick your application.
 
 ### Alternate Proposals
+
+
 - hopefully my arguments about why the current way we are doing the thing is not compatible with thing CD thing
 - use UI testing for smoke testing, use a test suite that is at most 100 (arbitrary number) tests
 - we want the smoke test to run in at most 15 minutes, with some architecture improvements I think its possible.

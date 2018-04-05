@@ -57,13 +57,13 @@ class EngagementProperties () {
   }
 
   async openEngagementPanel () {
-    let opened = this.engagementPanel.isOpen();
-    return !opened && engagementPanelToggle.click();
+    let opened = await this.engagementPanel.isOpen();
+    return !opened && await engagementPanelToggle.click();
   }
 
   async enterLockdownMode () {
-    this.openEngagementPanel()
-    return this.lockdownButton.click();
+    await this.openEngagementPanel()
+    return await this.lockdownButton.click();
   }
 }
 
@@ -73,7 +73,7 @@ class DocumentManager {
   }
 
   getDocumentRowByName(name) {
-    return this.root = element(by.cssContainingText('#document', name))
+    return this.root.element(by.cssContainingText('#document', name))
   }
 }
 
@@ -96,46 +96,71 @@ class DocumentRow {
 
 ```
 describe('lockdown', () => {
-  it('should disable editing and adding issues to documents after lockdown', () => {
+  it('should disable editing and adding issues to documents after lockdown', async () => {
       // declare stuff we need
       let defaultDocument = new DocumentManager.getDocumentRowByName('default document')
       let engagementPanel = new Navbar().engagementPanel
 
       // setup
-      engagementPanel.openEngagementPanel()
-      engagementPanel.lockdownButton.click()
+      await engagementPanel.openEngagementPanel()
+      await engagementPanel.lockdownButton.click()
 
       // inspect the DOM
-      assert.isFalse(defaultDocument.editButton.isPresent())
-      assert.isFalse(defaultDocument.issuesButton.isPresent())
+      assert.isFalse(await defaultDocument.editButton.isPresent())
+      assert.isFalse(await defaultDocument.issuesButton.isPresent())
     })
 })
 ```
 
-This test case would probably be used to check the acceptance critera "users should not be able to edit or add issues to documents in lockdown mode." What this test does is it keeps track of the state of the edit button and issues button of a DocumentRow in the document manager, it checks that in lockdown mode there is no edit or issues button for the user to use.
+This test case would probably be used to check the acceptance criteria "users should not be able to edit or add issues to documents in lockdown mode." What this test does is it keeps track of the state of the edit button and issues button of a DocumentRow in the document manager, it checks that in lockdown mode there is no edit or issues button for the user to use.
+
+At first glance, our test seems like a pretty reasonable way to see if that acceptance criteria of the lockdown functionality is working, but it turns out that its really easy to get into a situation where this test will actually give us both false positives and false negatives, which if true would mean that we would either have to spend test development's time to investigate a non existent issue, or would result in shipping a potential bug or untested feature.
+
+##### Aside
+While testing we want to took look for bugs, which presumably correspond to failed test cases, so our positive classification is bug and negative is no bug. In the context of test run results I want to define a false positive as a test case that has failed when the criteria that it intended to check is still fulfilled, and false negative as a test case that has passed when the criteria that it intended to check is not fulfilled, _or if the test is in a tautology state where it will always pass._
 
 ### Quality of Test Results
 
+For now I don't want to talk about false positives too much because other than a test failure due to some random non determinism, the only other why that I can think of that a test would give a negative is that there is some change in the UI, which the answer to that is to update the CSS selectors, or the navigation in the test scripts.
 
+A feature of UI tests is that the test scripts need to be periodically updated, when there are UI changes, a certain number of our test cases be pushed into contradiction states, those test cases will fail and we will learn about then though our daily test run results. But with UI changes some test cases are pushed into tautology states where from now on they will always pass, and there is not really any practical way to detect them.
 
-Before we write any UI tests, a question that we might want to answer is why do we want to write UI tests, and from what I've gathered, our automated UI testing project was intended reduce the amount of resources we needed in manual testing by having automated test developers automate manual test cases so that manual wouldn't need to run them anymore. Our experience with this project has actually shown that this was not necessarily a very good idea, but since its problems are not specific to UI testing I'm not going to talk about them. The other argument that I've heard others in our team say is that we need UI tests because you can't really be sure that the application works unless it works from the user's perspective, which I would agree with in the sense that under practical circumstances that statement is probably true.
-
-But then again there is a rebuttal, and that's where I talk about the reliability of UI testing, and that is reliability in two different respects in that there is reliability in the sense of to what degree can we trust our test results, as well as reliability in the sense of how often will a test suite blow up because the act of using WebDriver to control a browser through a script is essentially a non deterministic action from the perspective of the us the programmer.
-
-To get back to what might be wrong with UI testing in our first section, lets try to answer the question of that IF our create-document test case passes THEN our create-document functionality is working and its contrapositive are true statements, because if its really easy to get into a situation where this doesn't hold, then perhaps we cannot trust the results of our UI tests.
-
-Looking at the contrapositive case, IF the create-document test case fails Then the create-document functionality is not working. The most obvious way to try and make this untrue would be if the element selectors are no longer valid, then the test case will fail when you try to get the element, and the rebuttal to that would be a false negative is not a big deal, and you can just update the selector and the test will work as intended again. To that I would say that false negatives might be worse than you think, see boy who cried wolf, and a neural net that falsely classifies a patient's tumor as malignant, and while it is true that if your selector is not working you can just update it, we will see later that this is one thing that contributes to the scalability problems. Another way to get the contrapositive to not hold is if we decided that the document name should be displayed as ```${id} - ${name}``` instead of ```${id} ${name}``` and you might think that its similar to the problem we had with the outdated selectors, and you might know that these types of problems occur when you try to build an application without an API guarantee, but more on that later.
-
-Now to look at how we might get a false positive in UI testing, this time around we are going to use an example of checking if the lockdown functionality for engagements is working. Lets say that the requirements for lockdown is that you can no longer edit the names, or create issues for documents. It might seem somewhat reasonable that we check if this requirement is fulfilled by seeing if the edit name and add issue buttons are there so after entering lockdown mode our checks are
+To give a more concrete example we can use our toy example to see how a test case can enter such a state. Here is our toy example.
 
 ```
-assert.isFalse(editNameButton().isPresent())
-assert.isFalse(createIssueButton().isPresent())
+let defaultDocument = new DocumentManager.getDocumentRowByName('default document')
+let engagementPanel = new Navbar().engagementPanel
+
+await engagementPanel.openEngagementPanel()
+await engagementPanel.lockdownButton.click()
+
+assert.isFalse(await defaultDocument.editButton.isPresent())
+assert.isFalse(await defaultDocument.issuesButton.isPresent())
 ```
 
-at first glance this seems reasonable, but if the selectors for editNameButton and createIssueButton change and then some time down the road the lockdown functionality stops working, this test case will still pass.
+We can say that the test is working as intended because if the edit button or issues button were still present after lockdown mode was entered, our test case will fail. However in the next iteration of SE there is a feature where after you lockdown the engagement, you are redirected to a page that contains a summary of all work that was done on the engagement. The test case is pushed into a tautology state after the update because there is always going to be no edit button or issues button on the summary page. But since we are programmers, and we are very smart, we knew that this might happen so we actually wrote the original test case like this.
 
-The obvious fix for this test case would be first assert that the two buttons were there, then enter lockdown mode, then assert that the two button aren't there anymore. And actually it won't actually doesn't work because I tried doing that and there is some convoluted reason why certain implementations for hiding the buttons won't work with the solution whether the solution works or not is not even that important. The important part is actually that its not obvious that the test case has this weakness in the first place because while we know the problem in hindsight, we've actually at one point our entire team came together and talked about this problem, and no one noticed it, and personally it wasn't until the third time that I worked on this code in this area that I noticed the problem. So in this case, this test case would have been giving us false positives if the lockdown functionality had been broken in any time in the last few months.
+```
+let defaultDocument = new DocumentManager.getDocumentRowByName('default document')
+let engagementPanel = new Navbar().engagementPanel
+let url = await driver.getUrl()
+
+await engagementPanel.openEngagementPanel()
+await engagementPanel.lockdownButton.click()
+
+// if the url has changed, go back to the original page
+let newUrl = await driver.getUrl()
+if (url !== newUrl) {
+  driver.goto(url)
+}
+
+// check that we are on the right page just to be safe
+assert.isEqual(url, await driver.getUrl())
+assert.isFalse(await defaultDocument.editButton.isPresent())
+assert.isFalse(await defaultDocument.issuesButton.isPresent())
+```
+
+Our updated test case can actually still enter a tautology state when there is a new update, because the update changed the selectors for the edit and issues buttons, and even if the new button are there are can still be used in lockdown mode, our test says that the old buttons aren't present so everything is fine.
 
 ### Scalability of UI Testing
 I think that there are mainly two problems we run into when we try to scale up UI testing to encompass an entire regression suite. The more one being the cost of owning UI tests, and the second being the time it takes to run the tests.
